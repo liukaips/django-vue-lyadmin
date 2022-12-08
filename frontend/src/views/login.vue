@@ -16,16 +16,6 @@
             </template>
         </el-input>
       </el-form-item>
-      <el-form-item prop="captcha">
-        <el-input type="text"  size="large" v-model.trim="ruleForm.captcha" auto-complete="off" @keyup.enter="submitForm('ruleForm')"  placeholder="验证码">
-             <template #prepend>
-                <el-icon ><circle-check /></el-icon>
-              </template>
-              <template #append>
-                <img class="login-code" :src="image_base" @click="getCaptcha"/>
-              </template>
-        </el-input>
-      </el-form-item>
       <el-checkbox class="remember" v-model="rememberpassword">记住密码</el-checkbox>
       <el-form-item style="width:100%;margin-top: 10px">
         <el-button type="primary" size="large" :loading="loadingLg" style="width:100%;" @click="submitForm('ruleForm')">登录</el-button>
@@ -47,14 +37,12 @@
         ruleForm: {
             username: '',
             password: '',
-            captcha:'',
             captchaKey: null,
         },
         loginFlag:false,
         rules: {
             username: [{required: true, message: '请输入账号', trigger: 'blur'}],
             password: [{required: true, message: '请输入密码', trigger: 'blur'}],
-            captcha: [{required: true, message: '请输入验证码', trigger: 'blur'}],
         },
         image_base: null,
         allmenu:[]
@@ -265,7 +253,7 @@
               }
             })
           } else {
-            this.$message.error('请输入用户名密码/验证码！')
+            this.$message.error('请输入用户名密码！')
             return false
           }
         })

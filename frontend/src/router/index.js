@@ -78,43 +78,6 @@ const routes = [
           index: '/userManage',
         }
       },
-        {
-        path: '/userManageCrud',
-        name: 'userManageCrud',
-        component: () => import('../views/userManage/userManageCrud.vue'),
-        meta: {
-          requireAuth: true,
-          index: '/userManageCrud',
-        }
-      },
-        {
-            path: '/carouselSettingsimg',
-            name: 'carouselSettingsimg',
-            component: () => import('../views/platformSettings/carouselSettingsimg.vue'),
-            meta: {
-                requireAuth: true,
-                index: '/carouselSettingsimg',
-            }
-        },
-        {
-            path: '/platformSettingsother',
-            name: 'platformSettingsother',
-            component: () => import('../views/platformSettings/platformSettingsother.vue'),
-            meta: {
-                requireAuth: true,
-                index: '/platformSettingsother',
-            }
-        },
-
-      {
-        path: '/userFeekback',
-        name: 'userFeekback',
-        component: () => import('../views/userFeekback/userFeekback.vue'),
-        meta: {
-          requireAuth: true,
-          index: '/userFeekback',
-        }
-      },
       // 系统管理
       {
         path: '/departmentManage',

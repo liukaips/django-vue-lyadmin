@@ -20,3 +20,7 @@ yarn-error.log*
 *.njsproj
 *.sln
 *.sw?
+*.env
+/backend/env/
+.env
+/backend/env/*
