@@ -1,9 +1,9 @@
 from django.shortcuts import render
 from rest_framework.views import APIView
-from utils.jsonResponse import SuccessResponse,ErrorResponse
-from utils.common import get_parameter_dic,getRandomSet
+from utils.jsonResponse import SuccessResponse, ErrorResponse
+from utils.common import get_parameter_dic, getRandomSet
 import re
-from django.db.models import Q,F,Sum
+from django.db.models import Q, F, Sum
 from rest_framework.serializers import ModelSerializer
 from rest_framework import serializers
 from rest_framework_simplejwt.authentication import JWTAuthentication
@@ -19,6 +19,8 @@ from django.contrib.auth.hashers import make_password
 from utils.export_excel import export_excel
 from django.db import transaction
 from apps.oauth.models import OAuthWXUser
+
+
 # Create your views here.
 
 # ================================================= #
@@ -38,6 +40,7 @@ class UserManageSerializer(CustomModelSerializer):
             'post': {'required': False},
             'role': {'required': False},
         }
+
 
 class UserManageCreateSerializer(CustomModelSerializer):
     """
@@ -63,10 +66,12 @@ class UserManageCreateSerializer(CustomModelSerializer):
             'password': {'required': False},
         }
 
+
 class UserManageUpdateSerializer(CustomModelSerializer):
     """
     用户管理-序列化器
     """
+
     # 更新重写
     def update(self, instance, validated_data):
         if "password" in validated_data.keys():
@@ -74,23 +79,26 @@ class UserManageUpdateSerializer(CustomModelSerializer):
                 validated_data['password'] = make_password(validated_data['password'])
             else:
                 validated_data.pop('password', None)
-        return super().update(instance,validated_data)
+        return super().update(instance, validated_data)
 
     class Meta:
         model = Users
         read_only_fields = ["id"]
-        exclude = ['role', 'post', 'dept','identity']
+        exclude = ['role', 'post', 'dept', 'identity']
         extra_kwargs = {
             'post': {'required': False},
             'role': {'required': False},
             'name': {'required': False},
             'password': {'required': False},
         }
+
+
 class ExportUserManageSerializer(CustomModelSerializer):
     """
     导出 用户信息 简单序列化器
     """
     is_active_name = serializers.SerializerMethodField()
+
     def get_is_active_name(self, obj):
         if obj.is_active:
             return "正常"
@@ -99,19 +107,20 @@ class ExportUserManageSerializer(CustomModelSerializer):
 
     class Meta:
         model = Users
-        fields = ('id', 'nickname','mobile', 'is_active_name','create_datetime')
+        fields = ('id', 'nickname', 'mobile', 'is_active_name', 'create_datetime')
+
 
 class UserManageViewSet(CustomModelViewSet):
     """
     后台用户管理 接口:
     """
-    queryset = Users.objects.filter(identity=2).order_by("-create_datetime")#排除管理员
+    queryset = Users.objects.filter(identity=2).order_by("-create_datetime")  # 排除管理员
     serializer_class = UserManageSerializer
     create_serializer_class = UserManageCreateSerializer
     update_serializer_class = UserManageUpdateSerializer
     filterset_class = UsersManageTimeFilter
 
-    def disableuser(self,request,*args, **kwargs):
+    def disableuser(self, request, *args, **kwargs):
         """禁用用户"""
         instance = Users.objects.filter(id=kwargs.get('pk')).first()
         if instance:
@@ -130,11 +139,12 @@ class UserManageViewSet(CustomModelViewSet):
         data = ExportUserManageSerializer(queryset, many=True).data
         return SuccessResponse(data=export_excel(request, field_data, data, '用户数据.xls'), msg='success')
 
+
 # ================================================= #
 # ************** 前端用户中心 view  ************** #
 # ================================================= #
 
-#前端图片上传
+# 前端图片上传
 class uploadImagesView(APIView):
     '''
     前端图片上传
@@ -146,11 +156,12 @@ class uploadImagesView(APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request, *args, **kwargs):
-        result = ImageUpload(request,"frontendimages")
-        if result['code'] == 200 :
-            return SuccessResponse(data=result['img'],msg=result['msg'])
+        result = ImageUpload(request, "frontendimages")
+        if result['code'] == 200:
+            return SuccessResponse(data=result['img'], msg=result['msg'])
         else:
             return ErrorResponse(msg=result['msg'])
+
 
 class SetUserNicknameView(APIView):
     """
@@ -162,34 +173,34 @@ class SetUserNicknameView(APIView):
     permission_classes = [IsAuthenticated]
     authentication_classes = [JWTAuthentication]
 
-    #api文档参数
+    # api文档参数
 
     @swagger_auto_schema(operation_summary='app回收员修改昵称',
-    # manual_parameters=[#GET请求需要
-    #     # openapi.Parameter("nickname", openapi.IN_QUERY, description="要修改昵称", type=openapi.TYPE_STRING)
-    # ],
-    request_body=openapi.Schema(#POST请求需要
-        type=openapi.TYPE_OBJECT,
-        required=['nickname'],
-        properties={
-                'nickname':openapi.Schema(type=openapi.TYPE_STRING,description="要修改昵称"),
-             },
-        ),
-    responses={200:'success'},
-    )
-
+                         # manual_parameters=[#GET请求需要
+                         #     # openapi.Parameter("nickname", openapi.IN_QUERY, description="要修改昵称", type=openapi.TYPE_STRING)
+                         # ],
+                         request_body=openapi.Schema(  # POST请求需要
+                             type=openapi.TYPE_OBJECT,
+                             required=['nickname'],
+                             properties={
+                                 'nickname': openapi.Schema(type=openapi.TYPE_STRING, description="要修改昵称"),
+                             },
+                         ),
+                         responses={200: 'success'},
+                         )
     def post(self, request):
         nickname = get_parameter_dic(request)['nickname']
         if nickname is None:
             return ErrorResponse(msg="昵称不能为空")
-        if not isinstance(nickname,str):
+        if not isinstance(nickname, str):
             return ErrorResponse(msg='类型错误')
         user = request.user
-        user.nickname  = nickname
+        user.nickname = nickname
         user.save()
         return SuccessResponse(msg="success")
 
-#前端app头像修改
+
+# 前端app头像修改
 class ChangeAvatarView(APIView):
     '''
     前端app头像修改
@@ -201,16 +212,17 @@ class ChangeAvatarView(APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request, *args, **kwargs):
-        result = ImageUpload(request,"avatar")
-        if result['code'] == 200 :
+        result = ImageUpload(request, "avatar")
+        if result['code'] == 200:
             user = request.user
             user.avatar = result['img'][0]
             user.save()
-            return SuccessResponse(data=result['img'],msg=result['msg'])
+            return SuccessResponse(data=result['img'], msg=result['msg'])
         else:
             return ErrorResponse(msg=result['msg'])
 
-#注销账号(标记已注销)
+
+# 注销账号(标记已注销)
 class DestroyUserView(APIView):
     '''
     注销账号(标记已注销)
@@ -222,7 +234,7 @@ class DestroyUserView(APIView):
 
     def post(self, request, *args, **kwargs):
         user = request.user
-        if user.identity not in [0,1]:
+        if user.identity not in [0, 1]:
             return ErrorResponse(msg="该用户不支持注销")
         if '(已注销)' in user.username:
             return ErrorResponse(msg="该用户已注销或不支持注销")
@@ -234,8 +246,9 @@ class DestroyUserView(APIView):
             user.is_active = False
             user.save()
             OAuthWXUser.objects.filter(user=user).delete()
-            return SuccessResponse(data={},msg="success")
+            return SuccessResponse(data={}, msg="success")
 
-#前端APP下载页面
+
+# 前端APP下载页面
 def downloadapp(request):
-    return render(request,"download-app/index.html")
+    return render(request, "download-app/index.html")

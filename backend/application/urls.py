@@ -34,8 +34,6 @@ from apps.address.views import *
 from apps.logins.views import APPMobilePasswordLoginView,SendSmsCodeView,APPMobileSMSLoginView,ForgetPasswdResetView,RegisterView
 from apps.lyusers.views import SetUserNicknameView,ChangeAvatarView,uploadImagesView,DestroyUserView
 from apps.lymessages.views import UserMessagesView,UserMessagesNoticeView,GetUnreadMessageNumView
-from apps.platformsettings.views import *
-from apps.mall.views import *
 
 #app下载页
 from apps.lyusers.views import downloadapp
@@ -80,74 +78,14 @@ urlpatterns = [
     path('api/captcha/', CaptchaView.as_view()),
 
     #管理后台其他自定义接口
-    path('api/platformsettings/', include('apps.platformsettings.urls')),
     path('api/address/', include('apps.address.urls')),
     path('api/messages/', include('apps.lymessages.urls')),
     path('api/users/', include('apps.lyusers.urls')),
-    path('api/mall/', include('apps.mall.urls')),
     path('api/crontab/', include('apps.lycrontab.urls')),
 
     # ========================================================================================= #
     # ********************************** 前端微服务API用户接口************************************ #
     # ========================================================================================= #
-    #登录
-    path('api/app/register/', RegisterView.as_view(), name='app端手机号注册'),
-    path('api/h5/ttlogin/', TTXCXLoginAPIView.as_view(), name='字节跳动小程序登录认证'),
-    path('api/h5/wxh5logincheck/', CheckWeChatGZHH5APIView.as_view(), name='微信服务器校验服务器'),
-    path('api/h5/wxh5login/', WeChatGZHH5LoginAPIView.as_view(), name='微信公众号H5网页授权登录'),
-    path('api/h5/wxh5sign/', GetWeChatGZHH5JSSDKTempSignAPIView.as_view(), name='微信公众号H5网页获取js sdk的临时签名信息'),
-    path('api/app/login/', APPMobilePasswordLoginView.as_view(), name='app端手机号密码登录认证'),
-    path('api/app/wxlogin/', WeChatGZHLoginAPIView.as_view(), name='app端手机号微信登录认证'),
-    path('api/app/wxbindlogin/', WeChatGZHBindAPIView.as_view(), name='app端手机号微信登录认证绑定微信'),
-    path('api/app/sendsms/', SendSmsCodeView.as_view(), name='app端手机号发送短信验证码'),
-    path('api/app/moilelogin/', APPMobileSMSLoginView.as_view(), name='app端手机号短信登录认证'),
-    path('api/xcx/login/', WeChatXCXLoginAPIView.as_view(), name='微信小程序登录认证'),
-    path('api/xcx/mobilelogin/', WeChatXCXMobileLoginAPIView.as_view(), name='微信小程序手机号授权绑定登录认证'),
-    path('api/app/destoryuser/', DestroyUserView.as_view(), name='app端用户注销账户'),
-
-    #用户信息
-    path('api/app/restpassword/', ForgetPasswdResetView.as_view(), name='app端手机号重置密码'),
-    path('api/app/setnickname/', SetUserNicknameView.as_view(), name='app端修改昵称'),
-    path('api/app/changeavatar/', ChangeAvatarView.as_view(), name='app端回收员修改头像'),
-    path('api/app/uploadimage/', uploadImagesView.as_view(), name='app端上传图片'),
-    path('api/xcx/getuserinfo/', XCXWeChatUserInfoUpdateAPIView.as_view(), name='微信小程序获取用户信息'),
-    path('api/xcx/getshareqrcode/', GetXCXShareQrcodeView.as_view(), name='微信小程序用户获取推广小程序二维码'),
-    path('api/app/usermessages/', UserMessagesView.as_view(), name='app端获取系统消息和平台公告通知（包含已读，未读）/操作修改为已读/删除'),
-    path('api/app/usermessagesnotice/', UserMessagesNoticeView.as_view(), name='app端获取平台公告列表'),
-    path('api/app/getunreadmessagenums/', GetUnreadMessageNumView.as_view(), name='app端获取未读消息的数量'),
-    path('api/app/feeckback/', APPUserLeavingMessageView.as_view(), name='app端意见反馈'),
-
-    #用户地址管理API
-    path('api/app/getaddress/', GetAssressesListView.as_view(), name='app用户获取地址'),
-    path('api/app/addeditaddress/', CreateUpdateAssressesView.as_view(), name='app用户新增编辑地址'),
-    path('api/app/deladdress/', DeleteAssressesView.as_view(), name='app用户删除地址'),
-    path('api/app/setdefaultaddress/', SetDefaultAssressesView.as_view(), name='app用户设置默认地址'),
-
-    #商城API
-    path('api/app/getgoodstypelist/', GoodsTypeView.as_view(), name='app用户端商城-获取分类标签'),
-    path('api/app/getgoodslist/', GoodsListView.as_view(), name='app用户端商城-获取商品列表'),
-    path('api/app/getgoodsdetail/', GoodsDetailView.as_view(), name='app用户端商城-获取商品详情'),
-    path('api/app/cartoperate/', CartsView.as_view(), name='app用户端商城-购物车操作'),
-    path('api/app/cartselectall/', CartsSelectAllView.as_view(), name='app用户端商城-购物车全选\取消全选'),
-    path('api/app/mycoupon/', MyCouponView.as_view(), name='app用户端-我的优惠券'),
-    path('api/app/goodsordercancel/', GoodsOrderCancleView.as_view(), name='app用户端-取消商城订单'),
-    path('api/app/goodsordercommit/', OrdersCommitView.as_view(), name='app用户端-商城订单生成'),
-    path('api/app/goodsorderconfirmrev/', GoodsOrderConfirmReceiveView.as_view(), name='app用户端-商城订单生成'),
-    path('api/app/goodsorderlist/', GoodsOrdersListView.as_view(), name='app用户端-商城订单列表'),
-    path('api/app/goodsorderdetail/', GoodsOrdersDetailView.as_view(), name='app用户端-商城订单详情'),
-
-    #支付API
-    path('api/app/payment/', PaymentView.as_view(), name='app端购买接口'),
-    path('api/app/ali_notify/', alipay_notify.as_view(), name='支付宝异步通知回调接口'),
-    path('api/app/wechatpay_notify/', wechatpay_notify.as_view(), name='微信支付异步通知回调接口'),
-
-    #获取平台信息
-    path('api/getothersettings/', GetOtherManageDetailView.as_view(), name='前端用户获取平台其他设置'),
-    path('api/getrotationimgs/', GetLunboManageListView.as_view(), name='前端用户获取平台轮播图设置'),
-    re_path(r'^api/areas/$', ProvinceAreasView.as_view(),name='省市区三级联动获取省'),
-    re_path(r'^api/areas/(?P<pk>[1-9]\d*)/$', SubAreasView.as_view(),name='省市区三级联动获取市/区'),
-    path('api/getallareaslist/', GetProvinceAreasListView.as_view(), name='递归获取所有省市区数据'),
-    path('api/getaddressaccuracy/', GetAddressAccuracyView.as_view(), name='后台根据详细地址获取经纬度'),
 
     #是否允许前端接口访问(临时操作，重启后无效)
     path('api/super/operate/', OperateAllowFrontendView.as_view(), name='超级管理员动态操作是否允许前端api接口访问'),
