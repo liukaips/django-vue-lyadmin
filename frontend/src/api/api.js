@@ -171,19 +171,6 @@ export const getAddressaccuracy= params => ajaxGet({url: `getaddressaccuracy/`,p
 
 
 /**
- *意见反馈
- * */
-
-// 意见反馈 列表
-export const PlatformsettingsUserfeeckback= params => ajaxGet({url: `platformsettings/userfeeckback/`,params})
-// 意见反馈 新增
-export const PlatformsettingsUserfeeckbackAdd= params => ajaxPost({url: `platformsettings/userfeeckback/`,params})
-// 意见反馈 编辑
-export const PlatformsettingsUserfeeckbackEdit= params => ajaxPut({url: `platformsettings/userfeeckback/`,params})
-// 意见反馈 删除
-export const PlatformsettingsUserfeeckbackDelete= params => ajaxDelete({url: `platformsettings/userfeeckback/`,params})
-
-/**
  *地区管理
  * */
 
@@ -215,30 +202,6 @@ export const UsersUsersdisableEdit= params => ajaxPut({url: `users/users/disable
 // 用户管理 导出
 export const UsersUsersExportexecl= params => ajaxGet({url: `users/users/exportexecl/`,params})
 
-/**
-*平台设置
-*/
-//轮播图列表
-export const platformsettingsLunboimg= params => ajaxGet({url: `platformsettings/lunboimg/`,params})
-// 轮播图列表 新增
-export const platformsettingsLunboimgAdd= params => ajaxPost({url: `platformsettings/lunboimg/`,params})
-// 轮播图列表 编辑
-export const platformsettingsLunboimgEdit= params => ajaxPut({url: `platformsettings/lunboimg/`,params})
-// 轮播图列表 删除
-export const platformsettingsLunboimgDelete= params => ajaxDelete({url: `platformsettings/lunboimg/`,params})
-
-
-//其他设置
-export const platformsettingsOther= params => ajaxGet({url: `platformsettings/other/`,params})
-// 其他设置 新增
-export const platformsettingsOtherAdd= params => ajaxPost({url: `platformsettings/other/`,params})
-// 其他设置 编辑
-export const platformsettingsOtherEdit= params => ajaxPut({url: `platformsettings/other/`,params})
-// 其他设置 删除
-export const platformsettingsOtherDelete= params => ajaxDelete({url: `platformsettings/other/`,params})
-
-// 平台设置 图片上传
-export const platformsettingsUploadPlatformImg= params => uploadImg({url: `platformsettings/uploadplatformimg/`,params})
 
 //前端访问操作 获取
 export const superOerateGet= params => ajaxGet({url: `super/operate/`,params})
