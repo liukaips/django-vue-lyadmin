@@ -64,6 +64,7 @@ INSTALLED_APPS = [
     'apps.oauth',
     'apps.logins',
     'apps.lyusers',
+    'apps.platformsettings',
     'apps.lymonitor',
     'apps.lywebsocket',
     'apps.lycrontab',
